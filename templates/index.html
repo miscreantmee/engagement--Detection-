@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Engagement Detection</title>
+</head>
+<body>
+    <h1 style="text-align:center">Engagement Detection</h1>
+    <h1 style="text-align:center">Welcome to PRABHAT KASHYAP ^-^</h1>
+    
+    <!--<img id="video_feed" src="{{ url_for('video_feed') }}" alt="Webcam Feed">
+    <div id="result"></div> --->
+
+    <!-- Video element to display the webcam feed -->
+    <video id="webcam" autoplay></video>
+    <br>
+    <div id="result"></div>
+    <!-- Canvas element to capture frames for analysis -->
+    <!--<canvas id="outputCanvas" width="640" height="480"></canvas>--->
+
+    <!-- Button to start analysis -->
+    <button id="startButton">Start Analysis</button>
+    <!-- Button to stop analysis -->
+    <button id="stopButton">Stop Analysis</button>
+
+
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const webcam = document.getElementById('webcam');
+        const videoFeed = document.getElementById('webcam');
+
+
+        startButton.addEventListener('click', () => {
+            fetch('/video_feed?action=start');  // Send a request to start the model
+        });
+
+        stopButton.addEventListener('click', () => {
+            fetch('/video_feed?action=stop');  // Send a request to stop the model
+        });
+
+        // JavaScript code to update the webcam feed
+        document.addEventListener('DOMContentLoaded', async () => {
+            const updateVideoFeed = async () => {
+                const response = await fetch('/video_feed'); // Fetch the video feed from your Flask route
+        
+                if (response.ok) {
+                    videoFeed.src = response.url; // Update the <video> element with the new frame
+                }
+            };
+        
+            setInterval(updateVideoFeed, 500); // Update the video feed every 500 milliseconds
+        });
+        
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            webcam.srcObject = stream;
+        })
+        .catch(error => {
+            console.error('Error accessing webcam:', error);
+        });
+    </script>
+</body>
+</html>
